@@ -1,9 +1,17 @@
 import Fastify from 'fastify';
+import fastifyStatic from '@fastify/static';
+import path from 'node:path';
 import { getConfig, setConfig } from './configRuntime.js';
 import { step } from '../engine/loop.js';
 import { getCurrentTickAndSqrt, getPoolSnapshot } from '../sdk/poolState.js';
 export async function createServer() {
     const app = Fastify({ logger: true });
+    // Serve UI from /ui
+    const uiRoot = path.join(process.cwd(), 'dist-ui');
+    try {
+        await app.register(fastifyStatic, { root: uiRoot, prefix: '/' });
+    }
+    catch { }
     app.get('/', async (_req, reply) => reply.redirect('/status'));
     app.get('/config', async () => getConfig());
     app.post('/config', async (req, res) => {
