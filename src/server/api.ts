@@ -7,6 +7,8 @@ import { getCurrentTickAndSqrt, getPoolSnapshot } from '../sdk/poolState.js';
 export async function createServer() {
   const app = Fastify({ logger: true });
 
+  app.get('/', async (_req, reply) => reply.redirect('/status'));
+
   app.get('/config', async () => getConfig());
   app.post('/config', async (req, res) => {
     const next = req.body as RuntimeConfig;
