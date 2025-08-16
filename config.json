@@ -1,0 +1,22 @@
+{
+  "rpcUrl": "https://fullnode.mainnet.aptoslabs.com/v1",
+  "creditAccount": "0xYOUR_CREDIT_ACCOUNT",
+  "pool": "0xAPT_USDC_POOL",
+  "tokenAPT": "0xAPT_METADATA",
+  "tokenUSDC": "0xUSDC_METADATA",
+  "feeTier": 1,
+  "liquidity": {
+    "notionalUSDC": 10000,
+    "widthPct": 0.0025,
+    "minWidthTicks": 2,
+    "slippageBps": 5,
+    "maxGasAPT": 0.03
+  },
+  "strategy": {
+    "collectOnExit": false,
+    "compoundFees": true
+  },
+  "ops": { "pollSec": 5, "maxDailyTx": 200, "errorPause": true }
+}
+
+
