@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import path from 'node:path';
+import fs from 'node:fs';
 import type { RuntimeConfig } from '../shared/types.js';
 import { getConfig, setConfig } from './configRuntime.js';
 import { step } from '../engine/loop.js';
@@ -12,8 +13,13 @@ export async function createServer() {
   // Serve UI from /
   const uiRoot = path.join(process.cwd(), 'dist-ui');
   try {
-    await app.register(fastifyStatic, { root: uiRoot, prefix: '/' });
-  } catch {}
+    const exists = fs.existsSync(uiRoot);
+    app.log.info({ uiRoot, exists }, 'static ui config');
+    await app.register(fastifyStatic, { root: uiRoot, prefix: '/', index: ['index.html'] });
+    app.get('/', async (_req, reply) => reply.sendFile('index.html'));
+  } catch (e) {
+    app.log.warn({ err: e }, 'failed to register static ui');
+  }
 
   app.get('/config', async () => getConfig());
   app.post('/config', async (req, res) => {
